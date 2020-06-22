@@ -1,0 +1,22 @@
+{
+  "name": "movie-service",
+  "version": "1.0.0",
+  "description": "Service to provide detailed movies info",
+  "main": "index.js",
+  "scripts": {
+    "start": "node index",
+    "test": "node index.test | tap-spec"
+  },
+  "author": "Carlos Cunha",
+  "license": "ISC",
+  "dependencies": {
+    "dotenv-safe": "^8.2.0",
+    "express": "^4.17.1",
+    "helmet": "^3.23.1",
+    "mongodb": "^3.5.9",
+    "morgan": "^1.10.0",
+    "supertest": "^4.0.2",
+    "tap-spec": "^5.0.0",
+    "tape": "^5.0.1"
+  }
+}
