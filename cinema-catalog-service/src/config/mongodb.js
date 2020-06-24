@@ -1,11 +1,11 @@
-const MongoClient = require("mongodb").MongoClient;
+const MongoClient = require('mongodb').MongoClient;
 
 let connection = null;
 let db = null;
 
 function connect(callback){
-    if(connection) return callback(null, db);
-    
+    if(connection) return callback(null, db)
+
     MongoClient.connect(process.env.MONGO_CONNECTION, (err, conn) => {
         if(err)
             return callback(err, null);
@@ -13,7 +13,7 @@ function connect(callback){
             connection = conn;
             db = conn.db(process.env.DATABASE_NAME);
             return callback(null, db);
-        }
+        }    
     })
 }
 
