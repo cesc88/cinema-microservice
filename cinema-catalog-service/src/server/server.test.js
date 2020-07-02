@@ -10,7 +10,7 @@ function runTest(){
     test('Server Start', (t) => {
         server.start(apiMock, null, (err, srv) => {
             t.assert(!err && srv, "Server started");
-            t.end()
+            t.end();
         });
     })
 

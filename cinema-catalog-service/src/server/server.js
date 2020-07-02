@@ -1,4 +1,4 @@
-const express  = require('express');
+const express = require('express');
 const morgan = require('morgan');
 const helmet = require('helmet');
 let server = null;
@@ -20,7 +20,7 @@ function start(api, repository, callback){
 
 
 function stop(){
-    if(!server) server.close();
+    if(server) server.close();
     return true;
 }
 

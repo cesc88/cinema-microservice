@@ -1,5 +1,5 @@
 const mongodb = require("../config/mongodb");
-const ObjectId = require("mongodb").ObjectID;
+const ObjectId = require("mongodb").ObjectId;
 
 function getAllCities(callback){
     mongodb.connect((err, db) => {
@@ -8,11 +8,11 @@ function getAllCities(callback){
     })
 }
 
-function getCinemaByCityId(cityId, callback){
-    var ObjCity = ObjectId(cityId);
+function getCinemasByCityId(cityId, callback){
+    var ObjCityId = ObjectId(cityId);
     mongodb.connect((err, db) => {
-        db.collection("cinemaCatalog").find({_id: ObjCity},
-            {cinema:1}).toArray((err, cities) => {
+        db.collection("cinemaCatalog").find({_id: ObjCityId},
+            {cinemas:1}).toArray((err, cities) => {
                 if(err) return callback(err, null);
                 callback(err, cities[0].cinemas);
         });
@@ -23,4 +23,4 @@ function disconnect(){
     return mongodb.disconnect();
 }
 
-module.exports = { getAllCities, getCinemaByCityId, disconnect }
+module.exports = { getAllCities, getCinemasByCityId, disconnect }
