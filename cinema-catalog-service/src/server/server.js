@@ -1,7 +1,7 @@
 const express = require('express');
 const morgan = require('morgan');
 const helmet = require('helmet');
-let server = null;
+var server = null;
 
 function start(api, repository, callback){
 

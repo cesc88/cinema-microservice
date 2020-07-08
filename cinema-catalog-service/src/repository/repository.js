@@ -9,7 +9,7 @@ function getAllCities(callback){
 }
 
 function getCinemasByCityId(cityId, callback){
-    let ObjCityId = ObjectId(cityId);
+    var ObjCityId = ObjectId(cityId);
     mongodb.connect((err, db) => {
         db.collection("cinemaCatalog").find({_id: ObjCityId},
             {cinemas:1}).toArray((err, cities) => {
@@ -20,28 +20,28 @@ function getCinemasByCityId(cityId, callback){
 }
 
 function getMoviesByCinemaId(cinemaId, callback){
-    let ObjectCinemaId = ObjectId(cinemaId);
+    var ObjectCinemaId = ObjectId(cinemaId);
     mongodb.connect((err, db) => {
-        db.collection("cineamCatalog").aggregate([
-            {$matches: {"cinema._id": ObjectCinemaId}},
-            {$unwind: "$cinema"},
-            {$unwind: "$cinema.salas"},
-            {$unwind: "$cinema.salas.sessoes"},
+        db.collection("cinemaCatalog").aggregate([
+            {$match: {"cinemas._id": ObjectCinemaId}},
+            {$unwind: "$cinemas"},
+            {$unwind: "$cinemas.salas"},
+            {$unwind: "$cinemas.salas.sessoes"},
             {$group: {_id:{
-                filme:"$cinema.salas.sessoes.filme", 
-                idFilme: "$cinema.salas.sessoes.idFilme"}}}
+                filme:"$cinemas.salas.sessoes.filme", 
+                idFilme: "$cinemas.salas.sessoes.idFilme"}}}
         ]).toArray(callback)
     });
 }
 
 function getMoviesByCityId(cityId, callback){
-    let objCityId = ObjectId(cityId);
+    var objCityId = ObjectId(cityId);
     mongodb.connect((err, db) => {
         db.collection("cinemaCatalog").aggregate([
             {$match: {"_id": objCityId}},
             {$unwind: "$cinemas"},
-            {$unwind: "cinemas.salas"},
-            {$unwind: "cinemas.salas.sessoes"},
+            {$unwind: "$cinemas.salas"},
+            {$unwind: "$cinemas.salas.sessoes"},
             {$group: {_id: { 
                 filme: "$cinemas.salas.sessoes.filme", 
                 idFilme: "$cinemas.salas.sessoes.idFilme"}}}
@@ -55,24 +55,23 @@ function getMoviesByCityId(cityId, callback){
     })
 }
 
-function getmovieSessionsByCityId(movieId, cityId, callback){
-    let objMovieId = ObjectId(movieId);
-    let objCityId = ObjectId(cityId);
+function getMovieSessionsByCityId(movieId, cityId, callback){
+    var objMovieId = ObjectId(movieId);
+    var objCityId = ObjectId(cityId);
 
     mongodb.connect((err, db) => {
         db.collection("cinemaCatalog").aggregate([
-            {$match: {objCityId}},
+            {$match: {"_id": objCityId}},
             {$unwind: "$cinemas"},
             {$unwind: "$cinemas.salas"},
             {$unwind: "$cinemas.salas.sessoes"},
-            {$match: {"cinemas.salas.sessoes.idFilme":
-        objMovieId}},
+            {$match: {"cinemas.salas.sessoes.idFilme": objMovieId}},
             {$group: {_id: {
                 filme:"$cinemas.salas.sessoes.filme", 
                 idFilme: "$cinemas.salas.sessoes.idFilme",
                 idCinema: "$cinemas._id", 
                 salas: "$cinemas.salas.nome", 
-                sessao: "$cinemas.salas.sessoes"}}}
+                sessao: "$cinemas.salas.sessao"}}}
         ]).toArray((err, sessions) => {
             if(err) return callback(err, null);
             callback(err, sessions.map(item => {
@@ -81,27 +80,25 @@ function getmovieSessionsByCityId(movieId, cityId, callback){
                     filme: item._id.filme, 
                     idCinema: item._id.idCinema,
                     sala: item._id.sala,
-                    sessoa: item._id.sessao
+                    sessao: item._id.sessao
             }}));
         });
     });
 }
 
 function getMovieSessionsByCinemaId(movieId, cinemaId, callback){
-    let objMovieId = ObjectId(movieId);
-    let objCinemaId = ObjectId(cinemaId);
+    var objMovieId = ObjectId(movieId);
+    var objCinemaId = ObjectId(cinemaId);
     mongodb.connect((err, db) => {
         db.collection("cinemaCatalog").aggregate([
-            {$match: {objCinemaId}},
+            {$match: {"cinema._id": objCinemaId}},
             {$unwind: "$cinemas"},
             {$unwind: "$cinemas.salas"},
             {$unwind: "$cinemas.salas.sessoes"},
-            {$match: {"cinemas.salas.sessoes.idFilme":
-        objMovieId}},
+            {$match: {"cinemas.salas.sessoes.idFilme": objMovieId}},
             {$group: {_id: {
                 filme:"$cinemas.salas.sessoes.filme", 
-                idFilme: "$cinemas.salas.sessoes.idFilme",
-                idCinema: "$cinemas._id", 
+                idFilme: "$cinemas.salas.sessoes.idFilme", 
                 salas: "$cinemas.salas.nome", 
                 sessao: "$cinemas.salas.sessoes"}}}
         ]).toArray((err, sessions) => {
@@ -110,9 +107,8 @@ function getMovieSessionsByCinemaId(movieId, cinemaId, callback){
                 return {
                     idFilme: item._id.idFilme,
                     filme: item._id.filme, 
-                    idCinema: item._id.idCinema,
                     sala: item._id.sala,
-                    sessoa: item._id.sessao
+                    sessao: item._id.sessao
              }}));
         });    
     })
@@ -127,6 +123,6 @@ module.exports = {
     getCinemasByCityId, 
     getMoviesByCinemaId, 
     getMoviesByCityId,
-    getmovieSessionsByCityId,
+    getMovieSessionsByCityId,
     getMovieSessionsByCinemaId,  
     disconnect }

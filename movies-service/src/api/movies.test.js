@@ -6,7 +6,7 @@ const repository = require("../repository/repository");
 
 function runTest(){
 
-    let app = null;
+    var app = null;
     server.start(movies, repository, (err, app) => {
         let id = null;
         test('GET /movies', (t) => {
