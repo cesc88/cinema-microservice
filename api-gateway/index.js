@@ -6,6 +6,7 @@ var cookieParser = require('cookie-parser')
 var logger = require('morgan')
 const helmet = require('helmet')
 const { USERS_API_URL, PRODUCTS_API_URL } = require('./URLs')
+var port = 3000
 
 const userServiceProxy = httpProxy(USERS_API_URL)
 const productsServiceProxy = httpProxy(PRODUCTS_API_URL)
@@ -29,4 +30,4 @@ app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser());
 
 var server = http.createServer(app);
-server.listen(3000);
+server.listen(port);
