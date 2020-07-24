@@ -1,11 +1,13 @@
 const express = require('express');
 const morgan = require('morgan');
 const helmet = require('helmet');
+const cors = require('cors')
 var server = null;
 
 function start(api, repository, callback){
 
     const app = express();
+    app.use(cors());
     app.use(morgan('dev'));
     app.use(helmet());
     app.use((err, req, res, next) => {

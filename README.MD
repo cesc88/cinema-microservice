@@ -1,10 +1,10 @@
-[TOC]
-
 #### Tecnologias Utilizadas.
 
+- Cookie-Parser
 - Dotenv-safe;
 - Express;
 - Helmet;
+- JsonWebToken (JWT)
 - Mongodb;
 - Morgan;
 
